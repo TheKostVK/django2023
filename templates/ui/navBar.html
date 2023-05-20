@@ -1,0 +1,23 @@
+<nav style="margin-bottom: 50px;">
+    <a href="{% url 'index' %}" style="margin-left: 10px; display: inline-block;">
+        index
+    </a>
+    <a href="{% url 'blog' %}" style="margin-left: 10px; display: inline-block;">
+        blog
+    </a>
+    {% if user.is_authenticated %}
+        <p style="margin-left: 10px; display: inline-block;">
+            {{ user.username }}
+        </p>
+        <a href="{% url 'create_news' %}" style="margin-left: 10px; display: inline-block;">
+            create_news
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}" style="margin-left: 10px; display: inline-block;">
+            login
+        </a>
+        <a href="{% url 'register' %}" style="margin-left: 10px; display: inline-block;">
+            register
+        </a>
+    {% endif %}
+</nav>

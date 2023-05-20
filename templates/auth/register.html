@@ -1,0 +1,13 @@
+{% include "ui/navBar.html" %}
+
+<!-- register.html -->
+<form method="post" action="{% url 'register' %}">
+  {% csrf_token %}
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username">
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password">
+  <label for="confirm_password">Confirm Password:</label>
+  <input type="password" id="confirm_password" name="confirm_password">
+  <input type="submit" value="Register">
+</form>
