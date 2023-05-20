@@ -1,22 +1,25 @@
-<nav style="margin-bottom: 50px;">
-    <a href="{% url 'index' %}" style="margin-left: 10px; display: inline-block;">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+
+<nav class="mb-8">
+    <a href="{% url 'index' %}" class="ml-2 inline-block">
         index
     </a>
-    <a href="{% url 'blog' %}" style="margin-left: 10px; display: inline-block;">
+    <a href="{% url 'blog' %}" class="ml-2 inline-block">
         blog
     </a>
     {% if user.is_authenticated %}
-        <p style="margin-left: 10px; display: inline-block;">
+        <p class="ml-2 inline-block">
             {{ user.username }}
         </p>
-        <a href="{% url 'create_news' %}" style="margin-left: 10px; display: inline-block;">
+        <a href="{% url 'create_news' %}" class="ml-2 inline-block">
             create_news
         </a>
     {% else %}
-        <a href="{% url 'login' %}" style="margin-left: 10px; display: inline-block;">
+        <a href="{% url 'login' %}" class="ml-2 inline-block">
             login
         </a>
-        <a href="{% url 'register' %}" style="margin-left: 10px; display: inline-block;">
+        <a href="{% url 'register' %}" class="ml-2 inline-block">
             register
         </a>
     {% endif %}

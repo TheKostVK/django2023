@@ -1,3 +1,4 @@
 /news/migrations/
-.idea
 /static/news_images/
+/.idea/
+/node_modules/
