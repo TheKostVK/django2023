@@ -1,5 +1,5 @@
 # views.py
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -17,7 +17,7 @@ def login(request):
 
         if user is not None:
             # Успешная аутентификация
-            login(request, user)
+            auth_login(request, user)
             return redirect('index')
         else:
             # Неверные учетные данные
@@ -45,7 +45,10 @@ def register(request):
                 # Создание нового пользователя
                 user = User.objects.create_user(username=username, password=password)
                 user.save()
-                return redirect('login')
+                # Аутентификация и вход пользователя
+                authenticated_user = authenticate(request, username=username, password=password)
+                auth_login(request, authenticated_user)  # Измененное имя функции
+                return redirect('index')
         else:
             # Обработка случая, когда пароли не совпадают
             error_message = 'Пароли не совпадают'
@@ -91,8 +94,3 @@ def edit_news(request, news_id):
 
         return redirect('index')
     return render(request, 'news/edit_news.html', {'news': news})
-
-
-def blog(request):
-    blog_news = News.objects.filter(blog__isnull=False)
-    return render(request, 'blog.html', {'blog_news': blog_news})

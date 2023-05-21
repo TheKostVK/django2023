@@ -2,8 +2,18 @@
 
 <!-- index.html или любой другой шаблон -->
 {% for news in latest_news %}
-  <h2>{{ news.title }}</h2>
-  <p>{{ news.text }}</p>
-  <img src="{{ news.image.url }}" alt="{{ news.title }}">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mt-10">
+        <div class="md:flex">
+            <div class="md:shrink-0">
+                <img class="h-48 w-full object-cover md:h-full md:w-48" src="{{ news.image.url }}"
+                     alt="{{ news.title }}">
+            </div>
+            <div class="p-8">
+                <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{{ news.title }}</div>
+                <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">test</a>
+                <p class="mt-2 text-slate-500">{{ news.text }}</p>
+            </div>
+        </div>
+    </div>
 {% endfor %}
 
