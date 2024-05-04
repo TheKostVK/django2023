@@ -1,11 +1,11 @@
-from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 
 from user_profile.models import User
 
 
-class Notificaiton(models.Model):
+class Notification(models.Model):
     NOTIFICATION_TYPES = ("Blog", "Like", "Follow")
 
     content_type = models.ForeignKey(

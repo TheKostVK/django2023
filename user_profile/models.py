@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from .managers import CustomUserManager
 
@@ -9,7 +9,7 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
         error_messages={
-            "unique": "The email must be unique"
+            "unique": "Адрес электронной почты должен быть уникальным"
         }
     )
     profile_image = models.ImageField(
@@ -49,7 +49,4 @@ class Follow(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.followed_by.username} started following {self.followed.username}"
-
-
-
+        return f"{self.followed_by.username} начал следить за {self.followed.username}"

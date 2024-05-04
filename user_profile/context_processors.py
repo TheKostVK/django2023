@@ -1,11 +1,11 @@
-from notification.models import Notificaiton
+from notification.models import Notification
 
 
 def user_notifications(request):
     context = {}
 
     if request.user.is_authenticated:
-        notifications = Notificaiton.objects.filter(
+        notifications = Notification.objects.filter(
             user=request.user
         ).order_by('-created_date')
         unseen = notifications.exclude(is_seen=True)

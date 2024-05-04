@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
-  <head>
-      {% load static %}
+<head>
+    {% load static %}
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="TemplateMo">
+    <meta name="author" content="TheKost">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
 
     <title>{% block title %} {% endblock title %}</title>
@@ -15,26 +15,27 @@
     <!-- Bootstrap core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
-    <link rel="stylesheet" href="{% static 'css/templatemo-stand-blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css-base.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.css' %}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
 
-    {% include 'header.html' %}
+{% include 'header.html' %}
 
-    {% block content %}
-    {% endblock content %}
+{% block content %}
+{% endblock content %}
 
-    {% include 'footer.html' %}
+{% include 'footer.html' %}
 
-    {% include 'scripts.html' %}
+{% include 'scripts.html' %}
 
-    {% block scripts %}
-    {% endblock scripts %}
-    
+{% block scripts %}
+{% endblock scripts %}
+
 </body>
 </html>

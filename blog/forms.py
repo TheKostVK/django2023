@@ -1,8 +1,7 @@
+from ckeditor.fields import RichTextField
 from django import forms
 
 from .models import Blog
-
-from ckeditor.fields import RichTextField
 
 
 class TextForm(forms.Form):
@@ -11,7 +10,7 @@ class TextForm(forms.Form):
 
 class AddBlogForm(forms.ModelForm):
     description = RichTextField()
-    
+
     class Meta:
         model = Blog
         fields = (

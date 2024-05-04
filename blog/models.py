@@ -1,10 +1,9 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.text import slugify
 
 from user_profile.models import User
 from .slugs import generate_unique_slug
-
-from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -26,7 +25,7 @@ class Tag(models.Model):
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return self.title    
+        return self.title
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -67,7 +66,7 @@ class Blog(models.Model):
 
     def save(self, *args, **kwargs):
         updating = self.pk is not None
-        
+
         if updating:
             self.slug = generate_unique_slug(self, self.title, update=True)
             super().save(*args, **kwargs)

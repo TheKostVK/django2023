@@ -1,26 +1,26 @@
-from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import never_cache
 
-from .forms import (
+from notification.models import Notification  # Импорт модели уведомлений
+from .decorators import (  # Импорт пользовательских декораторов
+    not_logged_in_required
+)
+from .forms import (  # Импорт форм
     UserRegistrationForm,
     LoginForm,
     UserProfileUpdateForm,
     ProfilePictureUpdateForm
 )
-from .decorators import  (
-    not_logged_in_required
-)
-from .models import Follow, User
-from notification.models import Notificaiton
+from .models import Follow, User  # Импорт моделей
 
 
 @never_cache
-@not_logged_in_required
+@not_logged_in_required  # Декоратор, требующий, чтобы пользователь не был авторизован для доступа к представлению
 def login_user(request):
-    form = LoginForm()
+    form = LoginForm()  # Создание экземпляра формы входа
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -30,34 +30,34 @@ def login_user(request):
                 password=form.cleaned_data.get('password')
             )
             if user:
-                login(request, user)
+                login(request, user)  # Авторизация пользователя
                 return redirect('home')
             else:
-                messages.warning(request, "Wrong credentials")
+                messages.warning(request, "Неверные учетные данные")  # Сообщение об ошибке
 
     context = {
-        "form": form
+        "form": form  # Передача формы в контекст шаблона
     }
-    return render(request, 'login.html', context)
+    return render(request, 'login.html', context)  # Рендеринг шаблона для страницы входа
 
 
 def logout_user(request):
-    logout(request)
-    return redirect('login')
+    logout(request)  # Выход пользователя из системы
+    return redirect('login')  # Перенаправление на страницу входа
 
 
 @never_cache
 @not_logged_in_required
 def register_user(request):
-    form = UserRegistrationForm()
+    form = UserRegistrationForm()  # Создание экземпляра формы регистрации пользователя
 
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data.get('password'))
+            user.set_password(form.cleaned_data.get('password'))  # Установка пароля
             user.save()
-            messages.success(request, "Registration sucessful")
+            messages.success(request, "Регистрация успешна")  # Сообщение об успешной регистрации
             return redirect('login')
 
     context = {
@@ -66,19 +66,19 @@ def register_user(request):
     return render(request, 'registration.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='login')  # Декоратор, требующий, чтобы пользователь был авторизован
 def profile(request):
-    account = get_object_or_404(User, pk=request.user.pk)
-    form = UserProfileUpdateForm(instance=account)
-    
+    account = get_object_or_404(User, pk=request.user.pk)  # Получение учетной записи пользователя
+    form = UserProfileUpdateForm(instance=account)  # Создание экземпляра формы обновления профиля
+
     if request.method == "POST":
         if request.user.pk != account.pk:
             return redirect('home')
-        
+
         form = UserProfileUpdateForm(request.POST, instance=account)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Profile has been updated sucessfully")
+            form.save()  # Сохранение данных формы
+            messages.success(request, "Профиль успешно обновлен")  # Сообщение об успешном обновлении профиля
             return redirect('profile')
         else:
             print(form.errors)
@@ -93,19 +93,19 @@ def profile(request):
 @login_required
 def change_profile_picture(request):
     if request.method == "POST":
-        
+
         form = ProfilePictureUpdateForm(request.POST, request.FILES)
-        
+
         if form.is_valid():
             image = request.FILES['profile_image']
             user = get_object_or_404(User, pk=request.user.pk)
-            
+
             if request.user.pk != user.pk:
                 return redirect('home')
 
-            user.profile_image = image
+            user.profile_image = image  # Обновление изображения профиля
             user.save()
-            messages.success(request, "Profile image updated successfully")
+            messages.success(request, "Изображение профиля успешно обновлено")  # Сообщение об успешном обновлении изображения профиля
 
         else:
             print(form.errors)
@@ -114,21 +114,21 @@ def change_profile_picture(request):
 
 
 def view_user_information(request, username):
-    account = get_object_or_404(User, username=username)
+    account = get_object_or_404(User, username=username)  # Получение учетной записи пользователя
     following = False
     muted = None
 
     if request.user.is_authenticated:
-        
+
         if request.user.id == account.id:
             return redirect("profile")
 
         followers = account.followers.filter(
-        followed_by__id=request.user.id
+            followed_by__id=request.user.id
         )
         if followers.exists():
             following = True
-    
+
     if following:
         queryset = followers.first()
         if queryset.muted:
@@ -144,7 +144,7 @@ def view_user_information(request, username):
     return render(request, "user_information.html", context)
 
 
-@login_required(login_url = "login")
+@login_required(login_url="login")
 def follow_or_unfollow_user(request, user_id):
     followed = get_object_or_404(User, id=user_id)
     followed_by = get_object_or_404(User, id=request.user.id)
@@ -166,7 +166,7 @@ def follow_or_unfollow_user(request, user_id):
 
 @login_required(login_url='login')
 def user_notifications(request):
-    notifications = Notificaiton.objects.filter(
+    notifications = Notification.objects.filter(
         user=request.user,
         is_seen=False
     )
@@ -174,7 +174,7 @@ def user_notifications(request):
     for notification in notifications:
         notification.is_seen = True
         notification.save()
-        
+
     return render(request, 'notifications.html')
 
 
@@ -197,4 +197,3 @@ def mute_or_unmute_user(request, user_id):
         instance.save()
 
     return redirect('view_user_information', username=user.username)
-

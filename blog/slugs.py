@@ -13,13 +13,13 @@ def generate_unique_slug(instance, base_title, new_slug=False, update=False):
 
     if update:
         slug_exists = model.objects.filter(
-        slug__icontains=slug
-    ).exclude(pk=instance.pk)
+            slug__icontains=slug
+        ).exclude(pk=instance.pk)
 
     else:
         slug_exists = model.objects.filter(
-        slug__icontains=slug
-    ).exists()
+            slug__icontains=slug
+        ).exists()
 
     if slug_exists:
         random_string = "".join(random.choices(string.ascii_lowercase, k=4))
