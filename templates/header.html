@@ -1,8 +1,14 @@
+{% load static %}
+
 <!-- Header -->
 <header class="">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}"><h2>TheKost<em></em></h2></a>
+
+            <a class="navbar-brand mx-auto my-auto" style="display: flex;" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.svg' %}" alt="">
+                <h2>TheKost</h2>
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                     aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -15,7 +21,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blogs' %}">Блоги</a>
+                        <a class="nav-link" href="{% url 'blogs' %}">Посты</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -38,13 +44,13 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                                 <a class="dropdown-item" href="{% url 'profile' %}">Мой профиль</a>
-                                <a class="dropdown-item" href="{% url 'user_notifications' %}">
-                                    {% if unseen > 0 %}
-                                        Уведомления ({{ unseen }})
-                                    {% else %}
-                                        Уведомления
-                                    {% endif %}
-                                </a>
+{#                                <a class="dropdown-item" href="{% url 'user_notifications' %}">#}
+{#                                    {% if unseen > 0 %}#}
+{#                                        Уведомления ({{ unseen }})#}
+{#                                    {% else %}#}
+{#                                        Уведомления#}
+{#                                    {% endif %}#}
+{#                                </a>#}
                                 <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
 
                             </div>

@@ -24,7 +24,7 @@
                                                     <fieldset>
                                                         <input name="username" {% if form.is_bound %}
                                                                value="{{ form.username.value }}" {% endif %} type="text"
-                                                               id="username_id" placeholder="Your username">
+                                                               id="username_id" placeholder="Ваш логин">
                                                         <p class="py-1 text-danger errors">{{ form.username.errors }}</p>
                                                     </fieldset>
                                                 </div>
@@ -32,21 +32,21 @@
                                                     <fieldset>
                                                         <input name="email" {% if form.is_bound %}
                                                                value="{{ form.email.value }}" {% endif %} type="email"
-                                                               id="email_id" placeholder="Your email">
+                                                               id="email_id" placeholder="Ваша почта">
                                                         <p class="py-1 text-danger errors">{{ form.email.errors }}</p>
                                                     </fieldset>
                                                 </div>
                                                 <div class="col-md-12 col-sm-12">
                                                     <fieldset>
                                                         <input name="password" type="password" id="password_id"
-                                                               placeholder="Your password">
+                                                               placeholder="Ваш пароль">
                                                         <p class="py-1 text-danger errors">{{ form.password.errors }}</p>
                                                     </fieldset>
                                                 </div>
                                                 <div class="col-md-12 col-sm-12">
                                                     <fieldset>
                                                         <input name="confirm_password" type="password"
-                                                               id="confirm_password_id" placeholder="Retype password">
+                                                               id="confirm_password_id" placeholder="Повторите пароль">
                                                         <p class="py-1 text-danger errors">{{ form.confirm_password.errors }}</p>
                                                     </fieldset>
                                                 </div>
