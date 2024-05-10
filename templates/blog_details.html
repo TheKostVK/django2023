@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="content">
                                         <ul class="d-flex flex-column">
-                                            {% for comment in blog.blog_comments.all %}
+                                            {% for comment in blog.blog_comments.all|dictsortreversed:"created_date" %}
                                                 <li>
                                                     <div class="author-thumb">
                                                         <img src="{{ comment.user.get_profile_picture }}" alt="">
@@ -135,7 +135,7 @@
                                                         </form>
                                                     </div>
                                                 </li>
-                                                {% for reply in comment.comment_replies.all %}
+                                                {% for reply in comment.comment_replies.all|dictsortreversed:"created_date" %}
                                                     <li class="replied">
                                                         <div class="author-thumb">
                                                             <img src="{{ reply.user.get_profile_picture }}" alt="">
@@ -148,8 +148,6 @@
                                                     </li>
                                                 {% endfor %}
                                             {% endfor %}
-
-
                                         </ul>
                                     </div>
                                 </div>

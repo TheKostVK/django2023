@@ -1123,3 +1123,69 @@ footer p a:hover {
         margin-top: 60px;
     }
 }
+
+.feedback-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.feedback-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-form input[type="text"],
+.feedback-form input[type="email"],
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.feedback-form textarea {
+    height: 150px;
+}
+
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+/* Стили для контейнера блока благодарности */
+.thank-you-container {
+    height: 44vh;
+    text-align: center;
+    padding: 50px;
+}
+
+/* Стили для заголовка благодарности */
+.thank-you-heading {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Стили для сообщения благодарности */
+.thank-you-message {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
