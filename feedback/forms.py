@@ -6,9 +6,10 @@ from .models import Feedback
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['name', 'email', 'message']
+        fields = ['name', 'email', 'theme','message']
         labels = {
             'name': 'Имя',
             'email': 'Email',
+            'theme': 'Тема обращения',
             'message': 'Сообщение',
         }

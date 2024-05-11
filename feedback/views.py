@@ -16,3 +16,6 @@ def feedback(request):
 
 def feedback_thank_you(request):
     return render(request, 'feedback/feedbackEnd.html')
+
+
+
