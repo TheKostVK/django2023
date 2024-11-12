@@ -56,23 +56,17 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="list-group text-center mt-2 mb-5">
-                        <li class="list-group-item my-1">
-                            <a class="text-decoration-none" href="{% url 'my_blogs' %}">
-                                Мои посты
-                            </a>
-                        </li>
-                        <li class="list-group-item my-1">
-                            <a class="text-decoration-none" href="{% url 'add_blog' %}">
-                                Добавить пост
-                            </a>
-                        </li>
-                        <li class="list-group-item my-1">
-                            <a class="text-decoration-none" href="{% url 'feedback' %}">
-                                Обратная связь
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="text-center pt-2 pb-1">
+                        <button type="button" class="btn btn-primary" href="{% url 'my_blogs' %}">
+                            Мои посты
+                        </button>
+                        <button type="button" class="btn btn-primary" href="{% url 'add_blog' %}">
+                            Добавить пост
+                        </button>
+                        <button type="button" class="btn btn-primary" href="{% url 'feedback' %}">
+                            Обратная связь
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <form class="px-4" action="{% url 'profile' %}" method="POST">
