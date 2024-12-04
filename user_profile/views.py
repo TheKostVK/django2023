@@ -37,7 +37,7 @@ def login_user(request):
     context = {
         "form": form  # Передача формы в контекст шаблона
     }
-    return render(request, 'login.html', context)  # Рендеринг шаблона для страницы входа
+    return render(request, 'logReg/login.html', context)  # Рендеринг шаблона для страницы входа
 
 
 def logout_user(request):
@@ -62,7 +62,7 @@ def register_user(request):
     context = {
         "form": form
     }
-    return render(request, 'registration.html', context)
+    return render(request, 'logReg/registration.html', context)
 
 
 @login_required(login_url='login')  # Декоратор, требующий, чтобы пользователь был авторизован
@@ -86,7 +86,7 @@ def profile(request):
         "account": account,
         "form": form
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'profile/profile.html', context)
 
 
 @login_required
@@ -140,7 +140,7 @@ def view_user_information(request, username):
         "following": following,
         "muted": muted
     }
-    return render(request, "user_information.html", context)
+    return render(request, "profile/user_information.html", context)
 
 
 @login_required(login_url="login")

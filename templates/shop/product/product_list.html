@@ -1,0 +1,41 @@
+{% extends 'shop/base/base.html' %}
+
+{% block content %}
+    <div class="album">
+        <div class="container">
+            <h1 class="text-center">Каталог товаров</h1>
+            <div class="d-flex gap-2 justify-content-center py-5">
+                {% with request.GET.category as current_category %}
+                    <a href="{% url 'shop' %}"
+                       class="btn {% if not current_category %}btn-primary{% else %}btn-secondary{% endif %} rounded-pill px-3">
+                        Все
+                    </a>
+                    {% for category in categories %}
+                        <a href="{% url 'shop' %}?category={{ category.id }}"
+                           class="btn {% if category.id|stringformat:"s" == current_category %}btn-primary{% else %}btn-secondary{% endif %} rounded-pill px-3">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                {% endwith %}
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                {% if products %}
+                    {% for product in products %}
+                        {% include 'shop/product/product_card.html' with product=product %}
+                    {% endfor %}
+                {% else %}
+                    <section class="py-5 text-center container">
+                        <div class="row py-lg-5">
+                            <div class="col-lg-6 col-md-8 mx-auto">
+                                <h1 class="fw-light">
+                                    Пусто(
+                                </h1>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

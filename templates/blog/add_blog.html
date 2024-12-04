@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Добавить пост {% endblock title %}
+
+{% block content %}
+
+    <section class="add-blog">
+        <div class="container">
+            <div class="row py-5 justify-content-center">
+                <div class="col-md-8">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {{ form.media }}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">Заголовок</label>
+                            <input class="form-control" type="text" name="title">
+                            <p class="text-danger py-1">{{ form.title.errors }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Категория</label>
+                            <select class="form-control" name="category" id="category_id">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.title }}</option>
+                                {% endfor %}
+                                <p class="text-danger py-1">{{ form.category.errors }}</p>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Описание</label>
+                            {{ form.description|safe }}
+                            <p class="text-danger py-1">{{ form.description.errors }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Баннер поста</label>
+                            <input class="form-control" class="form-control" type="file" name="banner">
+                            <p class="text-danger py-1">{{ form.banner.errors }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Теги</label>
+                            <textarea class="form-control" name="tags" id="" cols="30" rows="10"
+                                      placeholder="Введите тег"></textarea>
+                            <p class="text-danger py-1">{{ form.tags.errors }}</p>
+                        </div>
+                        <div class="form-group my-2">
+                            <button type="submit" class="btn btn-primary btn-block">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock content %}

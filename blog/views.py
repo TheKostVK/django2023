@@ -25,7 +25,7 @@ def home(request):
         "blogs": blogs,  # Передача блогов в контекст шаблона
         "tags": tags  # Передача тегов в контекст шаблона
     }
-    return render(request, 'home.html', context)  # Рендеринг шаблона домашней страницы
+    return render(request, 'base/home.html', context)  # Рендеринг шаблона домашней страницы
 
 
 # Функция для отображения страницы блогов
@@ -48,7 +48,7 @@ def blogs(request):
         "tags": tags,  # Передача всех тегов в контекст шаблона
         "paginator": paginator  # Передача объекта пагинатора в контекст шаблона
     }
-    return render(request, 'blogs.html', context)  # Рендеринг шаблона страницы блогов
+    return render(request, 'blog/blogs.html', context)  # Рендеринг шаблона страницы блогов
 
 
 # Функция для отображения страницы блогов определенной категории
@@ -73,7 +73,7 @@ def category_blogs(request, slug):
         "tags": tags,  # Передача всех тегов в контекст шаблона
         "all_blogs": all_blogs  # Передача последних пяти блогов в контекст шаблона
     }
-    return render(request, 'category_blogs.html', context)  # Рендеринг шаблона страницы блогов категории
+    return render(request, 'blog/category_blogs.html', context)  # Рендеринг шаблона страницы блогов категории
 
 
 # Функция для отображения страницы блогов с указанным тегом
@@ -98,7 +98,7 @@ def tag_blogs(request, slug):
         "tags": tags,  # Передача всех тегов в контекст шаблона
         "all_blogs": all_blogs  # Передача последних пяти блогов в контекст шаблона
     }
-    return render(request, 'category_blogs.html', context)  # Рендеринг шаблона страницы блогов с тегом
+    return render(request, 'blog/category_blogs.html', context)  # Рендеринг шаблона страницы блогов с тегом
 
 
 # Функция для отображения подробностей поста
@@ -127,7 +127,7 @@ def blog_details(request, slug):
         "form": form,  # Передача формы комментария в контекст шаблона
         "liked_by": liked_by  # Передача информации о лайке в контекст шаблона
     }
-    return render(request, 'blog_details.html', context)  # Рендеринг шаблона страницы с деталями поста
+    return render(request, 'blog/blog_details.html', context)  # Рендеринг шаблона страницы с деталями поста
 
 
 # Функция для добавления ответа на комментарий к блогу
@@ -186,7 +186,7 @@ def search_blogs(request):
             "search_key": search_key  # Передача ключевого слова в контекст шаблона
         }
 
-        return render(request, 'search.html', context)  # Рендеринг шаблона страницы поиска
+        return render(request, 'base/search.html', context)  # Рендеринг шаблона страницы поиска
 
     else:
         return redirect('home')  # Перенаправление на домашнюю страницу
@@ -223,7 +223,7 @@ def my_blogs(request):
         "paginator": paginator  # Передача объекта пагинатора в контекст шаблона
     }
 
-    return render(request, 'my_blogs.html', context)  # Рендеринг шаблона страницы всех блогов пользователя
+    return render(request, 'blog/my_blogs.html', context)  # Рендеринг шаблона страницы всех блогов пользователя
 
 
 # Функция для добавления нового поста
@@ -268,7 +268,7 @@ def add_blog(request):
     context = {
         "form": form  # Передача формы в контекст шаблона
     }
-    return render(request, 'add_blog.html', context)  # Рендеринг шаблона страницы добавления поста
+    return render(request, 'blog/add_blog.html', context)  # Рендеринг шаблона страницы добавления поста
 
 
 # Функция для обновления существующего поста
@@ -317,4 +317,4 @@ def update_blog(request, slug):
         "form": form,  # Передача формы в контекст шаблона
         "blog": blog  # Передача объекта поста в контекст шаблона
     }
-    return render(request, 'update_blog.html', context)  # Рендеринг шаблона страницы обновления поста
+    return render(request, 'blog/update_blog.html', context)  # Рендеринг шаблона страницы обновления поста

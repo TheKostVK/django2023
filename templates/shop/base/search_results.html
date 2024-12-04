@@ -1,0 +1,29 @@
+{% extends 'shop/base/base.html' %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">Результаты поиска для "{{ request.GET.q }}"</h1>
+
+        {% if products %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for product in products %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text text-truncate">{{ product.description }}</p>
+                                <p class="text-success"><strong>{{ product.price }} ₽</strong></p>
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning text-center" role="alert">
+                По вашему запросу ничего не найдено.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

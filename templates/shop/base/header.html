@@ -1,0 +1,59 @@
+{% load static %}
+<header class="p-3 bg-light border-bottom">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <!-- Логотип -->
+            <a href="{% url 'shop' %}" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <img src="{% static 'images/logo.svg' %}" alt="TheKost Shop" width="40" height="32" class="me-2">
+                <h2 class="my-0">T-Shop</h2>
+            </a>
+
+            <!-- Навигация -->
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            </ul>
+
+            <!-- Поиск -->
+            <form action="{% url 'search_results' %}" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" name="q" class="form-control" placeholder="Поиск..." aria-label="Поиск" required>
+            </form>
+
+            <!-- Профиль пользователя -->
+            <div class="dropdown text-end">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- Имя пользователя -->
+                        <span class="me-2">{{ request.user.username }}</span>
+                        <!-- Аватар пользователя -->
+                        <img src="{{ request.user.get_profile_picture }}" alt="profile" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">Профиль</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user_orders' %}">Мои заказы</a></li>
+                        {% if user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'admin_orders' %}">Управление заказами</a>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                    </ul>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                {% endif %}
+            </div>
+            <div class="ms-3">
+                <a href="{% url 'cart' %}" class="btn btn-outline-primary position-relative">
+                Корзина
+                    {% with cart.items.count as item_count %}
+                        {% if item_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ item_count }}
+                                <span class="visually-hidden">товаров</span>
+                            </span>
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

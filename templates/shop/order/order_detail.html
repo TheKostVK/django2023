@@ -1,0 +1,51 @@
+{% extends 'shop/base/base.html' %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1>Детали заказа №{{ order.id }}</h1>
+
+        <div class="mb-4">
+            <h5>Статус заказа: <span class="badge bg-primary">{{ order.get_status_display }}</span></h5>
+            <p>Дата создания: {{ order.created_at|date:"d.m.Y H:i" }}</p>
+        </div>
+
+        <h3>Товары в заказе:</h3>
+        {% if items_with_totals %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена за единицу</th>
+                    <th>Общая цена</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items_with_totals %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'product_detail' item.product.id %}">
+                                {{ item.product.name }}
+                            </a>
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.unit_price }} ₽</td>
+                        <td>{{ item.total_price }} ₽</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h4 class="text-end mt-4">
+                Общая стоимость: <strong>{{ total_order_price }} ₽</strong>
+            </h4>
+        {% else %}
+            <p>В этом заказе нет товаров.</p>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'user_orders' %}" class="btn btn-secondary">Вернуться к списку заказов</a>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Продолжить покупки</a>
+        </div>
+    </div>
+{% endblock %}
