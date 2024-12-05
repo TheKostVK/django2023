@@ -32,11 +32,18 @@ class ProductCharacteristic(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, related_name='carts')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     session_key = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return f"Корзина для {self.user or 'анонимного пользователя'}"
+        if self.user:
+            return f"Корзина для {self.user.username}"
+        return "Корзина для анонимного пользователя"
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)

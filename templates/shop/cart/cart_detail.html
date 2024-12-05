@@ -53,10 +53,16 @@
                             </ul>
 
                             <!-- Кнопка оформить заказ -->
-                            <form action="{% url 'create_order' %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-success mt-3">Оформить заказ</button>
-                            </form>
+                            {% if user.is_authenticated %}
+                                <form action="{% url 'create_order' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success mt-3">Оформить заказ</button>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-warning mt-3">
+                                    <a href="{% url 'login' %}" class="btn btn-primary">Войдите</a>, чтобы оформить заказ.
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

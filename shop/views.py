@@ -6,24 +6,6 @@ from django.db.models import Q
 from django.views.generic import ListView
 from .models import Product, Cart, CartItem, Category, Order
 
-
-class ProductListView(View):
-    def get(self, request):
-        category_id = request.GET.get('category')
-        categories = Category.objects.all()
-        cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-
-        if category_id:
-            products = Product.objects.filter(category_id=category_id)
-        else:
-            products = Product.objects.all()
-
-        return render(request, 'shop/product/product_list.html', {
-            'products': products,
-            'categories': categories,
-            'cart': cart,
-        })
-
 class SearchResultsView(ListView):
     model = Product
     template_name = 'shop/base/search_results.html'
@@ -35,115 +17,66 @@ class SearchResultsView(ListView):
             Q(name__icontains=query) | Q(description__icontains=query)
         ).distinct()
 
+def get_or_create_cart(request):
+    """Общий метод для получения или создания корзины."""
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).order_by('-id').first()
+    else:
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+        cart, created = Cart.objects.get_or_create(session_key=request.session.session_key)
+    return cart
+
+
+class ProductListView(View):
+    def get(self, request):
+        category_id = request.GET.get('category')
+        categories = Category.objects.all()
+        products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+
+        cart = get_or_create_cart(request)
+        return render(request, 'shop/product/product_list.html', {
+            'products': products,
+            'categories': categories,
+            'cart': cart,
+        })
+
+
 class ProductDetailView(View):
     def get(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
-
-        if request.user.is_authenticated:
-            # Получаем последнюю корзину пользователя
-            cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-
-            if not cart:
-                if request.user.is_authenticated:
-                    cart = Cart.objects.create(user=request.user)
-                else:
-                    session_key = request.session.session_key
-                    if not session_key:
-                        request.session.create()
-                    cart = Cart.objects.create(session_key=request.session.session_key)
-        else:
-            session_key = request.session.session_key
-            if not session_key:
-                request.session.create()
-            # Получаем последнюю корзину для текущей сессии
-            cart = Cart.objects.filter(session_key=request.session.session_key).order_by('-id').first()
-
-        product_in_cart = cart.items.filter(product=product).exists() if cart else False
-        return render(request, 'shop/product/product_detail.html',
-                      {'product': product, 'cart': cart, 'product_in_cart': product_in_cart})
+        cart = get_or_create_cart(request)
+        product_in_cart = cart.items.filter(product=product).exists()
+        return render(request, 'shop/product/product_detail.html', {
+            'product': product,
+            'cart': cart,
+            'product_in_cart': product_in_cart,
+        })
 
 
 class CartDetailView(View):
     def get(self, request):
-        if request.user.is_authenticated:
-            # Получаем последнюю корзину пользователя
-            cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-
-            if not cart:
-                if request.user.is_authenticated:
-                    cart = Cart.objects.create(user=request.user)
-                else:
-                    session_key = request.session.session_key
-                    if not session_key:
-                        request.session.create()
-                    cart = Cart.objects.create(session_key=request.session.session_key)
-        else:
-            session_key = request.session.session_key
-            if not session_key:
-                request.session.create()
-            # Получаем последнюю корзину по session_key
-            cart = Cart.objects.filter(session_key=request.session.session_key).order_by('-id').first()
-
-        # Если корзина не найдена, создаём новую
-        if not cart:
-            cart = Cart.objects.create(user=request.user if request.user.is_authenticated else None,
-                                       session_key=request.session.session_key)
-
-        items = cart.items.all() if cart else []
-        for item in items:
-            item.total_price = item.quantity * item.product.price
-
-        # Вычисляем общую стоимость всех товаров в корзине
-        total_price = sum(item.total_price for item in items)
-
+        cart = get_or_create_cart(request)
+        items = cart.items.all()
+        total_price = sum(item.quantity * item.product.price for item in items)
         return render(request, 'shop/cart/cart_detail.html', {'items': items, 'total_price': total_price})
 
 
-# Класс для добавления товаров в корзину
 class AddToCartView(View):
     def post(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-
-        if request.user.is_authenticated:
-            # Получаем последнюю корзину пользователя или создаём новую
-            cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-            if not cart:
-                cart = Cart.objects.create(user=request.user)
-        else:
-            session_key = request.session.session_key
-            if not session_key:
-                request.session.create()
-            # Получаем последнюю корзину для текущей сессии или создаём новую
-            cart = Cart.objects.filter(session_key=request.session.session_key).order_by('-id').first()
-            if not cart:
-                cart = Cart.objects.create(session_key=request.session.session_key)
-
-        # Добавляем товар в корзину
+        cart = get_or_create_cart(request)
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if not created:
             cart_item.quantity += 1
             cart_item.save()
-
         return redirect('cart')
 
 
-# Класс для удаления товаров из корзины
 class RemoveFromCartView(View):
     def post(self, request, product_id):
-        if request.user.is_authenticated:
-            # Получаем последнюю корзину пользователя
-            cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-        else:
-            session_key = request.session.session_key
-            if not session_key:
-                request.session.create()
-            # Получаем последнюю корзину для текущей сессии
-            cart = Cart.objects.filter(session_key=request.session.session_key).order_by('-id').first()
-
-        if not cart:
-            return redirect('cart')
-
-        # Удаляем товар из корзины
+        cart = get_or_create_cart(request)
         cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
         cart_item.delete()
         return redirect('cart')
@@ -151,34 +84,22 @@ class RemoveFromCartView(View):
 
 class CreateOrderView(View):
     def post(self, request):
-        if request.user.is_authenticated:
-            # Получаем последнюю корзину пользователя
-            cart = Cart.objects.filter(user=request.user).order_by('-id').first()
-            if not cart:
-                return redirect('cart')
+        cart = get_or_create_cart(request)
+        items = cart.items.all()
+        if not items:
+            return redirect('cart')
 
-            items = cart.items.all()
-
-            if items:
-                # Создаём заказ
-                order = Order.objects.create(user=request.user, cart=cart)
-
-                # Обновляем количество товаров на складе
-                for item in items:
-                    if item.product.stock >= item.quantity:
-                        item.product.stock -= item.quantity
-                        item.product.save()
-                    else:
-                        return redirect('cart')
-
-                # Создаем новую корзину
-                Cart.objects.create(user=request.user)
-
-                return redirect('order_success')
+        order = Order.objects.create(user=request.user if request.user.is_authenticated else None, cart=cart)
+        for item in items:
+            if item.product.stock >= item.quantity:
+                item.product.stock -= item.quantity
+                item.product.save()
             else:
+                messages.error(request, f"Недостаточно {item.product.name} на складе.")
                 return redirect('cart')
-        else:
-            return redirect('login')
+
+        cart.items.all().delete()
+        return redirect('order_success')
 
 
 class OrderSuccessView(View):
